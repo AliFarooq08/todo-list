@@ -17,12 +17,39 @@
             <h1 class="logo-title">Todo-List</h1>
         </div>
         <div id="sidebar">
+            <h1 class="sidebar-divider">My Lists:</h1>
             <div id="lists-container">
                 <select class="todo-list" name="home" id="home">
                 </select>
             </div>
-            <button id="create-list" command="show-modal" commandfor="add-list">Create list</button>
-            <button id="delete-list">Delete Current List</button>
+            <h1 class="sidebar-divider">Lists Creation:</h1>
+            <div id="list-function-container">
+                <div id="create-list" class="svg-button-container">
+                    <svg class="sidebar-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>pencil-circle-outline</title><path d="M7,14.94L13.06,8.88L15.12,10.94L9.06,17H7V14.94M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M16.7,9.35L15.7,10.35L13.65,8.3L14.65,7.3C14.86,7.08 15.21,7.08 15.42,7.3L16.7,8.58C16.92,8.79 16.92,9.14 16.7,9.35M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2" /></svg>
+                    <button class="sidebar-button" command="show-modal" commandfor="add-list">Create list</button>
+                </div>
+                <div id="delete-list" class="svg-button-container">
+                    <svg class="sidebar-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>delete-circle-outline</title><path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M16,10V17A1,1 0 0,1 15,18H9A1,1 0 0,1 8,17V10H16M13.5,6L14.5,7H17V9H7V7H9.5L10.5,6H13.5Z" /></svg>
+                    <button class="sidebar-button" >Delete Current List</button>       
+                </div>
+                             
+            </div>
+            <h1 class="sidebar-divider">Filters:</h1>
+            <div id="filters-container">
+                <div id="past-due" class="svg-button-container">
+                    <svg class="sidebar-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>clock-alert</title><path d="M20 12H22V18H20V12M20 20H22V22H20V20M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22C14.3 22 16.3 21.2 18 20V10H21.8C20.9 5.4 16.8 2 12 2M16.2 16.2L11 13V7H12.5V12.2L17 14.9L16.2 16.2Z" /></svg>  
+                    <button class="sidebar-button">Past due</button>
+                </div>
+                <div id="upcoming" class="svg-button-container">
+                    <svg class="sidebar-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>calendar-clock</title><path d="M15,13H16.5V15.82L18.94,17.23L18.19,18.53L15,16.69V13M19,8H5V19H9.67C9.24,18.09 9,17.07 9,16A7,7 0 0,1 16,9C17.07,9 18.09,9.24 19,9.67V8M5,21C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H6V1H8V3H16V1H18V3H19A2,2 0 0,1 21,5V11.1C22.24,12.36 23,14.09 23,16A7,7 0 0,1 16,23C14.09,23 12.36,22.24 11.1,21H5M16,11.15A4.85,4.85 0 0,0 11.15,16C11.15,18.68 13.32,20.85 16,20.85A4.85,4.85 0 0,0 20.85,16C20.85,13.32 18.68,11.15 16,11.15Z" /></svg>
+                    <button class="sidebar-button">Upcoming</button>
+                </div>
+                <div id="important" class="svg-button-container">
+                    <svg class="sidebar-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>exclamation-thick</title><path d="M10 3H14V14H10V3M10 21V17H14V21H10Z" /></svg>
+                    <button class="sidebar-button">Important</button>
+                </div>
+                
+            </div>
         </div>
         <div id="content">
             <div id="create-todo-button-container">
@@ -33,6 +60,7 @@
             </div>
         </div>
     </div>
+
     <dialog id="add-list">
         <form method="dialog" id="list-form">
             <legend class="list-form-title">Make a list!</legend>
@@ -43,6 +71,7 @@
             <button id="submit-list">submit</button>
         </form>
     </dialog>
+
     <dialog id="add-todo">
         <form method="dialog" id="todo-form">
             <legend class="todo-form-title">Make a todo!</legend>

@@ -1,36 +1,41 @@
 import "./styles.css";
-import { addDays, format, intervalToDuration, isBefore } from 'date-fns';
+import { addDays, format, intervalToDuration, isBefore, isAfter, isSameDay } from 'date-fns';
 
 let addList = document.getElementById("add-list");
-let listForm = document.querySelector("#list-form");
-let listContainer = document.querySelector("#home");
+let listForm = document.getElementById("list-form");
+let listContainer = document.getElementById("home");
 let currentTodoList = listContainer.value;
-let listName = document.querySelector("#list-name");
+let listName = document.getElementById("list-name");
 let newOption = document.createElement("option");
 
-let listDelete = document.querySelector("#delete-list");
+let listDelete = document.getElementById("delete-list");
 
 let addTodo = document.getElementById("add-todo");
-let todoForm = document.querySelector("#todo-form");
-let todoList = document.querySelector(".todo-list");
-let todosContainer = document.querySelector("#todos-container");
-let createTodo = document.querySelector("#create-todo");
+let todoForm = document.getElementById("todo-form");
+let todoList = document.getElementsByClassName("todo-list");
+let todosContainer = document.getElementById("todos-container");
+let createTodo = document.getElementById("create-todo");
 
-let titleInput = document.querySelector("#todo-title-input");
-let descInput = document.querySelector("#todo-desc-input");
-let dueDateInput = document.querySelector("#todo-date-input");
-let dueTimeInput = document.querySelector("#todo-time-input");
+let titleInput = document.getElementById("todo-title-input");
+let descInput = document.getElementById("todo-desc-input");
+let dueDateInput = document.getElementById("todo-date-input");
+let dueTimeInput = document.getElementById("todo-time-input");
 let priorityInput = document.querySelector("input[name='Priority']:checked");
-let notesInput = document.querySelector("#todo-notes-input");
+let notesInput = document.getElementById("todo-notes-input");
 let change = false;
+
+let pastDue = document.getElementById("past-due")
+let upcoming = document.getElementById("upcoming")
+let important = document.getElementById("important")
 
 let allTodos = [];
 let allLists = [];
 
-const today = format(new Date(), 'yyyy-MM-dd');
-dueDateInput.min = today;
+const todayDate = format(new Date(), 'yyyy-MM-dd');
+const todayTime = format(new Date(), 'HH:mm:ss');
+dueDateInput.min = todayDate;
 setInterval(() => {
-    if (dueDateInput.value == today) {
+    if (dueDateInput.value == todayDate) {
         dueTimeInput.min = format(new Date(), 'HH:mm:ss');
     }
     else {
@@ -85,6 +90,28 @@ listForm.addEventListener("submit", () => {
     addList.close()
 });
 
+pastDue.addEventListener("click", () => {
+    updateDisplay(allTodos, "past due")
+})
+upcoming.addEventListener("click", () => {
+    updateDisplay(allTodos, "upcoming")
+})
+important.addEventListener("click", () => {
+    updateDisplay(allTodos, "important")
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
 createTodo.addEventListener("click", () => {
     change = false;
     titleInput.value = "";
@@ -111,7 +138,7 @@ todoForm.addEventListener("submit", () => {
         notesInput.value = "";
         allTodos.push(newTodo);
         localStorage.setItem("userSavedTodos", JSON.stringify(allTodos));
-        updateDisplay(allTodos);
+        updateDisplay(allTodos, "list");
         addTodo.close();        
     }
 });
@@ -125,7 +152,7 @@ function addTodoDOM(object) {
 
     let todoTitle = document.createElement("h1");
     todoTitle.innerHTML = `<strong>Title:</strong> ${object.title}`;
-    todoTitle.className = "todo-text-adapt"
+    todoTitle.className = "todo-big-text-adapt"
 
     let todoDescription = document.createElement("p");
     todoDescription.innerHTML = `<strong>Description:</strong> ${object.description}`;
@@ -136,13 +163,15 @@ function addTodoDOM(object) {
 
     let todoPriority = document.createElement("p");
     todoPriority.innerHTML = `<strong>Priority:</strong> ${object.priority}`;
+    todoPriority.className = "todo-text-adapt"
     
     let todoDate = document.createElement("p");
     todoDate.innerHTML = `<strong>Time Due:</strong> ${object.dueDate} ${object.dueTime}`;
+    todoDate.className = "todo-text-adapt"
 
     let todoColRight = document.createElement("div");
     todoColRight.id = "todo-col3";
-
+    
     let todoNotes = document.createElement("p");
     todoNotes.innerHTML = `<strong>-Note:</strong> ${object.notes}`;
     todoNotes.className = "todo-text-adapt"
@@ -159,7 +188,7 @@ function addTodoDOM(object) {
         let tempList = allTodos.filter(item => item.id !== object.id);
         allTodos = tempList;
         localStorage.setItem("userSavedTodos", JSON.stringify(allTodos));
-        updateDisplay(allTodos);
+        updateDisplay(allTodos, "list");
     });
 
     todoChange.addEventListener("click", () => {
@@ -190,7 +219,7 @@ function addTodoDOM(object) {
                 object.priority = priorityInput.value;
                 object.notes = notesInput.value
                 localStorage.setItem("userSavedTodos", JSON.stringify(allTodos));
-                updateDisplay(allTodos);
+                updateDisplay(allTodos, "list");
                 addTodo.close();        
             }
         });
@@ -209,6 +238,7 @@ function addTodoDOM(object) {
     todoColRight.appendChild(todoChange)
     const whenDue = new Date(`${object.dueDate}T${object.dueTime}`);
     let todoReminder = document.createElement("p")
+    todoReminder.className = "todo-text-adapt"
     
     
     todoColMid.appendChild(todoReminder)
@@ -227,21 +257,54 @@ function addTodoDOM(object) {
     }, 1000);
 }
 
-function updateDisplay(array) {
+function updateDisplay(array, type) {
     todosContainer.replaceChildren();
-    array.forEach(object => {
-        if (object.list == currentTodoList) {
-            console.log("success!")
-            addTodoDOM(object)
-        }
-    })
+    if (type === "list") {
+        array.forEach(object => {
+            if (object.list == currentTodoList) {
+                console.log("success!")
+                addTodoDOM(object)
+            }
+        })        
+    }
+    if (type === "upcoming") {
+        currentTodoList = ""
+        array.forEach(object => {
+            if (isAfter(object.dueDate, todayDate) || isSameDay(object.dueDate, todayDate) && object.dueTime > todayTime) {
+                console.log("success!")
+                addTodoDOM(object)
+            }
+        })
+    }
+    if (type === "past due") {
+        currentTodoList = ""
+        array.forEach(object => {
+            if (isBefore(object.dueDate, todayDate) || isSameDay(object.dueDate, todayDate) && object.dueTime < todayTime) {
+                console.log("success!")
+                addTodoDOM(object)
+            }
+        })
+    }
+    if (type === "important") {
+        currentTodoList = ""
+        array.forEach(object => {
+            if (object.priority === "High") {
+                console.log("success!")
+                addTodoDOM(object)
+            }
+        })            
+    }
+
 }
 
-listContainer.addEventListener("change", (event) => {
+listContainer.addEventListener("change", () => {
     currentTodoList = listContainer.value;
-    updateDisplay(allTodos);
+    updateDisplay(allTodos, "list");
 })
-
+listContainer.addEventListener("click", () => {
+    currentTodoList = listContainer.value;
+    updateDisplay(allTodos, "list");
+})
 window.addEventListener("load", () => {
     let tempAllLists = localStorage.getItem("userSavedLists")
     let tempAllTodos = localStorage.getItem("userSavedTodos")
@@ -257,7 +320,7 @@ window.addEventListener("load", () => {
     }
     if (tempAllTodos) {
         allTodos = JSON.parse(tempAllTodos)
-        updateDisplay(allTodos);
+        updateDisplay(allTodos, "list");
     }
     if (localStorage.getItem("userSavedLists") === null && localStorage.getItem("userSavedTodos") === null) {
         console.log("First Initialization!")
@@ -269,13 +332,13 @@ window.addEventListener("load", () => {
         allLists.push(initialOption.textContent)
         localStorage.setItem("userSavedLists", JSON.stringify(allLists))
         let tttest = currentTodoList
-        let ttest = new todoInfo("MyFirstTodo", "Its just a test with a soon to be due date!", today, "23:59:59", "Medium", "Will Soon Delete", tttest, crypto.randomUUID());
+        let ttest = new todoInfo("MyFirstTodo", "Its just a test with a soon to be due date!", todayDate, "23:59:59", "Medium", "Will Soon Delete", tttest, crypto.randomUUID());
         allTodos.push(ttest)
         localStorage.setItem("userSavedTodos", JSON.stringify(allTodos));
-        updateDisplay(allTodos);
+        updateDisplay(allTodos, "list");
     }
     else {
         currentTodoList = listContainer.value;
-        updateDisplay(allTodos);
+        updateDisplay(allTodos, "list");
     }
 });
