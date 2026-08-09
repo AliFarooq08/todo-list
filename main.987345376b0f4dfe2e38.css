@@ -13,7 +13,7 @@ body {
 }
 #container {
     display: grid;
-    grid-template-columns: 10% 1fr;
+    grid-template-columns: min(25%, 30vw) 1fr;
     grid-template-rows: 12.5% 1fr;
     grid-template-areas:
         "logo header"
@@ -26,19 +26,26 @@ body {
     justify-content: space-between;
     align-items: center;
     grid-area: header;
-    border-top: 8px solid rgb(84, 142, 209);
-    border-right: 8px solid rgb(84, 142, 209);
-    border-bottom: 8px solid rgb(84, 142, 209);
+    border-top: min(0.5vw, 8px) solid rgb(84, 142, 209);
+    border-right: min(0.5vw, 8px) solid rgb(84, 142, 209);
+    border-bottom: min(0.5vw, 8px) solid rgb(84, 142, 209);
     font-size: min(32px, 1vw);
 }
 .title {
     margin-left: 1vw;
+    font-size: max(1.3vw, 32px);
 }
-#create-list, #delete-list, #create-todo, #submit-list, #submit-todo, #todo-change, #todo-delete{
+.sidebar-divider {
+    text-align: center;
+
+    padding-top: 8px;
+    font-size: max(16px, 1vw);
+}
+#todo-delete, #create-todo, #todo-change, #submit-todo, #submit-list {
     background-image: radial-gradient(circle, rgb(255, 255, 255), rgb(234, 234, 234));
-    padding: 16px 32px;
-    font-size: max(32px, 1vw);
-    border: 8px solid rgb(84, 142, 209);
+    padding: min(1vw, 16px) min(2vw, 32px);
+    font-size: max(8px, 0.75vw);
+    border: 0.2vw solid rgb(84, 142, 209);
     border-radius: 16px;
     margin: 1vw 16px;
 }
@@ -47,46 +54,48 @@ body {
     display: flex;
     flex-direction: column;
     grid-area: sidebar;
-    border-right: 8px solid rgb(84, 142, 209);
-    border-left: 8px solid rgb(84, 142, 209);
-    border-bottom: 8px solid rgb(84, 142, 209);
+    border-right: min(0.5vw, 8px) solid rgb(84, 142, 209);
+    border-left: min(0.5vw, 8px) solid rgb(84, 142, 209);
+    border-bottom: min(0.5vw, 8px) solid rgb(84, 142, 209);
 }
 #logo-container {
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    border: 8px solid rgb(84, 142, 209);
+    border: min(0.5vw, 8px) solid rgb(84, 142, 209);
     grid-area: logo;
 }
 .logo {
-    width: 2vw;
-    height: 2vw;
+    width: max(1.3vw, 16px);
+    height: max(1.3vw, 16px);
 }
 .logo-title {
-    font-size: 1.3vw;
+    font-size: max(1.3vw, 12px);
 }
-#lists-container {
+#lists-container, #filters-container, #list-function-container {
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-bottom: min(0.5vw, 8px) solid rgb(84, 142, 209);
 }
 .todo-list, .todo-list:focus, .todo-list:hover {
     background-image: none;
     outline: none;
-    border: 2px solid rgb(84, 142, 209);
-    width: 90%;
-    height: 38px;
+    border: min(0.5vw, 4px) solid rgb(84, 142, 209);
+    width: 50%;
+    height: max(32px, 1.5vw);;
     text-align: center;
-    font-size: clamp(0.5vw, 1.2rem, 1vw);
-    margin-top: 1vh;
+    font-size: max(12px, 1vw);
+    margin-top: 8px;
+    margin-bottom: 16px;
 }
 #content {
     display: flex;
     flex-direction: column;
     grid-area: content;
-    border-bottom: 8px solid rgb(84, 142, 209);
-    border-right: 8px solid rgb(84, 142, 209);
+    border-bottom: min(0.5vw, 8px) solid rgb(84, 142, 209);
+    border-right: min(0.5vw, 8px) solid rgb(84, 142, 209);
 }
 #add-list[open], #add-todo[open] {
     position: absolute;
@@ -107,7 +116,7 @@ body {
     justify-content: center;
     align-items: center;
     width: fit-content; 
-    border: 8px solid rgb(84, 142, 209);
+    border: min(0.5vw, 8px) solid rgb(84, 142, 209);
     padding: 16px;
     background-image: radial-gradient(circle, rgb(255, 255, 255), rgb(234, 234, 234));
 }
@@ -140,7 +149,7 @@ body {
     grid-template-areas: "col1 col2 col3";
     width: 50vw;
     max-width: 50vw;
-    border: 4px solid rgb(84, 142, 209);
+    border: min(0.5vw, 8px) solid rgb(84, 142, 209);
 }
 #todo-col1, #todo-col2, #todo-col3 {
     display: flex;
@@ -153,15 +162,23 @@ body {
     
 }
 #todo-col2 {
-    border-right: 4px dashed rgb(84, 142, 209);
-    border-left: 4px dashed rgb(84, 142, 209);
+    border-right: min(0.5vw, 8px) dashed rgb(84, 142, 209);
+    border-left: min(0.5vw, 8px) dashed rgb(84, 142, 209);
     
 }
-.todo-text-adapt {
+.todo-big-text-adapt {
     display: block;
     width: 16vw;
     height: auto;
     overflow-wrap: break-word;
+    font-size: min(32px, 2vw);
+}
+.todo-text-adapt {
+    width: 16vw;
+    height: auto;
+    overflow-wrap: break-word;
+    font-size: min(16px, 2vw);
+
 }
 #todo-col1 {
     grid-area: col1;
@@ -196,8 +213,27 @@ textarea {
     color: red;
 }
 #todo-change, #todo-delete {
-    width: fit-content;
     text-align: center;
 }
+.svg-button-container {
+    display: flex;
+    flex-direction: row;
+    border: 0.2vw solid rgb(84, 142, 209);
+    padding: min(0.2vw, 8px) min(30vw, 8px);
+    width: fit-content;
+    margin: max(8px, 0.5vw) 0px;
+    gap: min(0.2vw, 8px);
+    background-image: radial-gradient(circle, rgb(255, 255, 255), rgb(234, 234, 234));
+}
+.sidebar-svg {
+    width: calc(min(30vw, 8px) + max(12px, 1vw));
+    height: calc(min(30vw, 8px) + max(12px, 1vw));
+}
+.sidebar-button {
+    background-image: none;
+    background-color: rgba(0, 0, 0, 0);
+    border: none;
+    font-size: max(10px, 0.80vw);
+}
 
-/*# sourceMappingURL=main.e105676e7931872260c4.css.map*/
+/*# sourceMappingURL=main.987345376b0f4dfe2e38.css.map*/
